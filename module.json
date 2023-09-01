@@ -1,0 +1,13 @@
+[
+  {
+    "Name": "g2",
+    "Summary": "g2, the simple git client",
+    "Version": "1.0",
+    "Source": "g2.mx",
+    "Dependencies": {
+      "Optional": [],
+      "Required": [],
+      "Platform": ["posix"]
+    }
+  }
+]
