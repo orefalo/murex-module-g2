@@ -1,6 +1,6 @@
 # murex-module-g2
 
-This module installs all my preferences.
+g2, the simple git client
 
 ## Install
 

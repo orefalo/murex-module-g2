@@ -1,0 +1,22 @@
+#
+# G2 for Murex shell
+#
+# Author - Olivier Refalo
+#
+
+function git_is_repo {
+ g .git -> f +d -> if { return true } else {
+    git rev-parse --git-dir --is-bare-repository 2>/dev/null -> set info
+    return $info[2] = false
+ }
+}
+
+function git_branch_name -d "get current branch name"
+    git rev-parse --abbrev-ref HEAD
+end
+
+# Ensure git is installed in the path
+if test -z (which git)
+    __g2_fatal "Sorry, git is a required G2 dependency and must be in the PATH";
+    exit 1;
+end
