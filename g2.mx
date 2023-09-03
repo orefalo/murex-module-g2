@@ -4,19 +4,34 @@
 # Author - Olivier Refalo
 #
 
+
+function g2_fatal (message: str) {
+    out "{RED}{BOLD}FATAL:{RESET} $message"
+}
+function g2_info (message: str) {
+    out "{WHITE}{BOLD}$message{RESET}"
+}
+
+# returns false if in a git repo
 function git_is_repo {
  g .git -> f +d -> if { return true } else {
-    git rev-parse --git-dir --is-bare-repository 2>/dev/null -> set info
-    return $info[2] = false
+    trypipe {
+        git rev-parse <!null> -q --git-dir --is-bare-repository -> set info
+        return $info[2] == false
+    }
+    catch {
+        return false
+    }
  }
 }
 
-function git_branch_name -d "get current branch name"
-    git rev-parse --abbrev-ref HEAD
-end
+# get current branch name
+function git_branch_name {
+    git rev-parse -q --abbrev-ref HEAD
+}
 
 # Ensure git is installed in the path
-if test -z (which git)
+which git -> f +x -> if {
     __g2_fatal "Sorry, git is a required G2 dependency and must be in the PATH";
     exit 1;
-end
+}
