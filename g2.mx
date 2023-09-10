@@ -4,10 +4,10 @@
 # Author - Olivier Refalo
 #
 
-
 function g2_fatal (message: str) {
     out "{RED}{BOLD}FATAL:{RESET} $message"
 }
+
 function g2_info (message: str) {
     out "{WHITE}{BOLD}$message{RESET}"
 }
@@ -34,4 +34,78 @@ function git_branch_name {
 which git -> f +x -> if {
     __g2_fatal "Sorry, git is a required G2 dependency and must be in the PATH";
     exit 1;
+}
+
+private __g2_usage {
+    out "G2 Usage:
+    abort - aborts any rebase/merge
+    am <?-f> - amends last commit with staging area
+    br <?-D> <?-M> <?branch> - list or create branches
+    bs - bisect, aka bug finder
+    co <branch> - switches branch (either local/remote)
+    continue - resumes a conflict resolution
+    cp <commit> - cherry-pick
+    ci <?params...> - commit
+    cz - commits with cz-customizable
+    clone <url> - clone a remote repository
+    df/dt <?params...> <file> - compares files
+    fetch - gets changes sitting on the server
+    freeze/unfreeze <?-m comment> <?file> - freeze/unfreeze files
+    gc - garbage collects repository, runs fsck & gc
+    gp - grep
+    gui - launches the GUI
+    ig <file> - adds to gitignore & removes from source control
+    init <folder> - init a repository
+    key <?-gen> - displays/generates your ssh public key
+    mg <?params...> <branch> - merge
+    mt <?params...> - fixes conflicts by opening a visual mergetool
+    mv - move (rename) a file
+    lg - displays branch history log
+    ls <?params...> - list files under source control
+    panic - gets you back on HEAD, cleans all untracked files
+    prune - strips history to reduce repository size
+    pull/push <?opts> <remote> <branch> - deals with other branches
+    rb <?params...> <branch> or <upstream> - rebase
+    rm <params...> - remove files
+    rs <params...> - reset branch status
+    rs upstream - resets branch to upstream state
+    rt <?params...> - git remotes management
+    rv <commit> - reverts commits
+    server - starts a local git:// server on current repo
+    setup - configures user, key, editor, tools
+    sh <?-deep> - show commit contents
+    sm <?params...> - submodule management
+    ss <?params> - stash changes
+    st <?params...> - display status
+    sync <?upstream> - syncs working branch: fetch, rebase & push
+    tg - tag
+    track <?upstream_branch> - shows/set remove branch tracking
+    undo <file>|commit|merge - reverts last changes
+    version - prints g2 version
+    wip/unwip - save/restore work in progress to branch"
+}
+
+
+private __g2_lg
+    if test (count $argv) -eq 0
+
+        if test (uname) = "Darwin"
+            command git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative | command more -r
+        else
+            command git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative | command less -r
+        end
+
+    else
+        command git log $PARAMS
+    end
+end
+
+switch $USER {
+    case "Tom"   { out "Hello Tom" }
+    case "Dick"  { out "Howdie Richard" }
+    case "Sally" { out "Nice to meet you" }
+
+    default {
+        out "I don't know who you are"
+    }
 }
