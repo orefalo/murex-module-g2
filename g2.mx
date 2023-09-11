@@ -86,7 +86,7 @@ private __g2_usage {
 }
 
 
-function __g2_lg {
+private __g2_lg {
     $PARAMS -> count == 0 -> if {
         os darwin -> if  {
             command git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative -> command more -r
@@ -100,12 +100,13 @@ function __g2_lg {
 
 
 function gg {
-    $PARAMS -> count == 0 -> if { __g2_usage }
-    else {
-        switch $USER {
-            case "Tom"   { out "Hello Tom" }
-            case "Dick"  { out "Howdie Richard" }
-            case "Sally" { out "Nice to meet you" }
+   $PARAMS -> count
+    $PARAMS -> count > 0 -> if { __g2_usage } else {
+       out $PARAMS
+       $PARAMS -> [ 0 ] -> switch  {
+            case "lg"  then { __g2_lg }
+            case "Dick"  then { out "Howdie Richard" }
+            case "Sally" then { out "Nice to meet you" }
 
             default {
                 g2_usage
