@@ -31,9 +31,9 @@ function git_branch_name {
 }
 
 # Ensure git is installed in the path
-which git -> f +x -> if {
+which git -> f +x -> !if {
     __g2_fatal "Sorry, git is a required G2 dependency and must be in the PATH";
-    exit 1;
+    return 1;
 }
 
 private __g2_usage {
@@ -97,12 +97,22 @@ function __g2_lg {
     else { command git log $PARAMS }
 }
 
-switch $USER {
-    case "Tom"   { out "Hello Tom" }
-    case "Dick"  { out "Howdie Richard" }
-    case "Sally" { out "Nice to meet you" }
 
-    default {
-        out "I don't know who you are"
+
+function gg {
+    $PARAMS -> count == 0 -> if { __g2_usage }
+    else {
+        switch $USER {
+            case "Tom"   { out "Hello Tom" }
+            case "Dick"  { out "Howdie Richard" }
+            case "Sally" { out "Nice to meet you" }
+
+            default {
+                g2_usage
+                g2_fatal "Invalid g2 command!"
+                return 1
+            }
+        }
     }
 }
+
